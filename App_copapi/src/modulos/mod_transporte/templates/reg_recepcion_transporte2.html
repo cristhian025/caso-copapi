@@ -1,0 +1,134 @@
+{% extends 'menu.html' %}
+
+{% block contenido %}
+<div class="card-modulo">
+    <div class="card-modulo-header">
+      <h3>Registrar Recepcion Transporte</h3>
+      <a href="/transporte/reg_recepcion_transporte" class="btn bg-rojo-2 color-rojo-1">
+        <i class="bx bx-chevrons-left"></i> Regresar
+      </a>
+    </div>
+    <div class="card-modulo-body">
+        <h5>Selecciona un Transporte de proyecto a recepcionar</h5>
+        <div id="contenedor-tabla-recepcion-transporte"></div>
+    </div>
+</div>
+
+<div class="card-modulo">
+    <div class="card-modulo-body">
+        <h5>Formulario Transporte</h5>
+            <div id="contenedor-tabla-detalle-transporte"></div>
+      
+            <form id="form-recepcion_transporte" class="form" autocomplete="off">
+              <div class="input-group">
+                <label for="id_transporte">Id transporte</label>
+                <input type="number" name="id_transporte" id="id_transporte" required readonly>
+              </div>
+              <div class="input-group">
+                <label for="observacion">Observacion</label>
+                <input type="text" name="observacion" id="observacion">
+              </div>
+              <div class="input-group">
+                <label for="estado_transporte">Estado transporte:</label>
+                    <select name="estado_transporte" id="estado_transporte" required>
+                        <option value="E">Entregado</option>
+                        <option value="C">Cancelado</option>
+                    </select>
+              </div>
+              <div class="btn-form">
+                <button type="submit" class="bg-verde-1">Confirmar</button>
+              </div>
+            </form>
+          </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block modulos_js %}
+
+<script type="module">
+    import {DataTable} from "/static/js/componentes/index.js";
+
+    const id_proyecto = parseInt("{{id_proyecto}}");
+    cargarDatosRecepcionTransporte();
+    async function cargarDatosRecepcionTransporte() {
+        try {
+            const response = await fetch(`${URL_API}/transporte/obtener_transportes_proyecto_recepcion/${id_proyecto}`);
+            const data = await response.json();
+
+            const tb_recepcion_transporte = new DataTable({
+                contenedor: 'contenedor-tabla-recepcion-transporte', 
+                idTabla: 'tb-recepcion-transporte', 
+                columnas: [
+                    { campo: "id", titulo: "Id transporte" },
+                    { campo: "fecha_salida", titulo: "Fecha salida" },
+                    { campo: "observacion", titulo: "Observación" },
+                    { campo: "placa", titulo: "Placa" },
+                    { campo: "chofer", titulo: "Chofer" },
+                    {
+                    campo: "operacion",
+                    titulo: "Operación",
+                    render: (datos) => `<button type="button" class="btn-tb-opcion bg-verde-1" title="Seleccionar" onclick="seleccionar_transporte(${datos.id})">
+                        <i class='bx bx-check-square'></i>
+                        </button>`,
+                    },
+                ],
+                datos: data.registros
+            });
+
+        } catch (error) {
+            console.error('Error al cargar los datos:', error);
+        }
+    }
+
+    window.seleccionar_transporte = function (id_transporte) {
+        document.getElementById('id_transporte').value = id_transporte;
+        cargarDatosDetalleTransporte(id_transporte)
+      };
+
+    async function cargarDatosDetalleTransporte(id_transporte) {
+        try {
+            const response = await fetch(`${URL_API}/transporte/obtener_detalles_transporte/${id_transporte}`);
+            const data = await response.json();
+
+            const tb_detalle_transporte = new DataTable({
+                contenedor: 'contenedor-tabla-detalle-transporte', 
+                idTabla: 'tb-detalle-transporte', 
+                columnas: [
+                    { campo: "deposito", titulo: "Id transporte" },
+                    { campo: "material", titulo: "Fecha salida" },
+                    { campo: "cantidad_material", titulo: "Observación" }
+                ],
+                datos: data.registros
+            });
+
+        } catch (error) {
+            console.error('Error al cargar los datos:', error);
+        }
+    }
+
+    document.getElementById("form-recepcion_transporte").addEventListener("submit", async (event) => {
+        event.preventDefault(); // Evita la recarga de la página
+  
+        const form = event.target;
+        const formData = new FormData(form);
+        try {
+          const response = await fetch(
+            `${URL_API}/transporte/reg_recepcion_transporte/${id_proyecto}`,
+            {
+              method: "POST",
+              body: formData,
+            }
+          );
+          const respuesta = await response.json();
+          if (respuesta.exito) {
+            crearMensaje(respuesta.titulo,respuesta.mensaje,respuesta.redireccion);
+          } else {
+            crearMensaje(respuesta.titulo, respuesta.mensaje);
+          }
+        } catch (error) {
+          console.error("Error en la petición:", error);
+        }
+      });
+</script>
+{% endblock %}

@@ -1,0 +1,442 @@
+:root {
+  --bg-body: #d1d1e9;
+
+  --opcion1: #fff;
+  --opcion2: #d1d1e9;
+  --opcion3: #f0f0f0;
+  --opcion4: #7166df;
+
+  --azul1: #4663de;
+  --azul2: #1976d2;
+  --rojo1: #ff0060;
+  --rojo2: #fecdd3;
+  --amarillo1: #fbc02d;
+  --amarillo2: #fff2c6;
+  --verde1: #45ab4a;
+  --verde2: #bbf7d0;
+  --verde3: #00ff0d;
+
+  --blanco: #f0f0f0;
+  --bg-btn-usuario: #4663de96;
+
+  --text-xl: 1.25rem;
+  --text-body: #101828;
+  --text-opcion1: #7d8da1;
+  --text-opcion2: #7166df;
+
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --shadow1: 0 10px 15px -3px var(--shadow-color),
+    0 4px 6px -4px var(--shadow-color);
+  --borde-r-1: 0.4rem;
+}
+
+body.dark {
+  --bg-body: #3c3e58;
+  --text-body: #f9f9f9;
+  --opcion1: #313348;
+  --opcion2: #474a72;
+  --opcion3: #3c3e5847;
+
+  --text-opcion1: #89879f;
+  --shadow-color: rgba(0, 0, 0, 0.4);
+  /* Más oscura y con mayor opacidad */
+}
+
+/* ================================== GENERALES ================================== */
+select {
+  border-radius: var(--borde-r-1);
+  border: 1px solid var(--opcion2);
+  cursor: pointer;
+}
+
+.bg-amarillo-1 {
+  background-color: var(--amarillo1);
+}
+.bg-rojo-1 {
+  background-color: var(--rojo1);
+}
+.bg-rojo-2 {
+  background-color: var(--rojo2);
+}
+.bg-verde-1 {
+  background-color: var(--verde1);
+}
+.bg-verde-2 {
+  background-color: var(--verde2);
+}
+.bg-azul-1 {
+  background-color: var(--azul1);
+}
+.bg-azul-2 {
+  background-color: var(--azul2);
+}
+.bg-opcion4{
+  background-color: var(--opcion4);
+}
+
+.color-rojo-1 {
+  color: var(--rojo1);
+}
+.color-rojo-2 {
+  color: var(--rojo2);
+}
+.color-verde-1 {
+  color: var(--verde1);
+}
+.color-verde-2 {
+  color: var(--verde2);
+}
+.color-verde-3 {
+  color: var(--verde3);
+}
+
+.color-blanco {
+  color: var(--blanco);
+}
+input[type="search"] {
+  width: 100%;
+  padding: 5px 10px;
+  border-radius: var(--borde-r-1) 0 0 var(--borde-r-1);
+  border: 1px solid var(--opcion2);
+}
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  margin-left: 5px;
+  background-image: url("/static/imgs/x.png");
+  background-size: cover;
+  background-color: var(--rojo2);
+  border-radius: 9999px;
+  padding: 0.3rem;
+}
+input[type="search"]::-webkit-search-cancel-button:hover{
+  background-color: var(--rojo1);
+}
+
+/* ================================== componente de Card modulo ================================== */
+.card-modulo {
+  margin-bottom: 0.5rem;
+  background-color: var(--opcion1);
+  position: relative;
+  border: 0px solid transparent;
+  border-radius: var(--borde-r-1);
+  box-shadow: 0px 0px 13px 0px rgba(82, 63, 105, 0.05);
+}
+.card-modulo-header {
+  border-radius: var(--borde-r-1) var(--borde-r-1) 0 0;
+  position: relative;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--opcion2);
+  color: var(--text-body);
+  font-size: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.card-modulo-body {
+  color: var(--text-body);
+  padding: 1rem 1rem;
+}
+.card-modulo-body h5{
+  margin-bottom: 0.3rem;
+}
+/* ================================== componente de tabla ================================== */
+.dataTable-filtro {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.search-filtro {
+  display: flex;
+  border-radius: var(--borde-r-1);
+  font-size: 0.9rem;
+  flex: 0.5;
+  /*background-color: var(--opcion2);*/
+}
+
+.search-filtro button {
+  padding: 5px 10px;
+  border-radius: 0 var(--borde-r-1) var(--borde-r-1) 0;
+  cursor: pointer;
+  background-color: var(--azul1);
+  color: var(--blanco);
+  font-size: 1rem;
+}
+
+.dataTable {
+  overflow-x: auto;
+  max-height: 50vh;
+  background-color: var(--opcion1);
+}
+
+.dataTable table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dataTable table thead {
+  position: sticky;
+  top: 0;
+  background-color: var(--opcion1);
+}
+
+.dataTable th {
+  text-transform: capitalize;
+  color: var(--azul2);
+}
+
+.dataTable th,
+.dataTable td {
+  padding: 10px;
+  text-align: left;
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--opcion2);
+}
+
+.dataTable tbody tr:hover {
+  background-color: var(--opcion2);
+}
+.dataTable td .btn-tb-opcion {
+  border-radius: var(--borde-r-1);
+  padding: 0.2rem 0.3rem;
+  color: var(--blanco);
+  font-size: 1rem;
+}
+.dataTable-paginacion {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  gap: 1rem;
+  flex-wrap: wrap;
+  font-size: 1rem;
+}
+
+.dataTable-paginacion select {
+  padding: 5px 10px;
+  font-size: 0.9rem;
+}
+
+.dataTable-paginacion .paginacion-limit {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.paginacion-controles {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.paginacion-controles button {
+  padding: 7px 10px;
+  background-color: var(--azul1);
+  color: var(--blanco);
+  border-radius: var(--borde-r-1);
+}
+
+.paginacion-controles button:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+/* ============================= Formulario ============================= */
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+}
+.form .input-group {
+  display: flex;
+  flex: 45%;
+  min-width: 250px;
+  flex-direction: column;
+}
+.form .input-group-full {
+  display: flex;
+  flex: 100%;
+  min-width: 250px;
+  flex-direction: column;
+}
+.form .btn-form {
+  display: flex;
+  flex: 100%;
+  justify-content: center;
+}
+.form label , .form .label{
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+  color: var(--text-body);
+}
+.form input,
+.form textarea,
+.form select, 
+.form .multiselect, .input-style{
+  width: 100%;
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--blanco);
+  border-radius: var(--borde-r-1);
+  background-color: var(--opcion2);
+  color: var(--text-body);
+}
+.form textarea {
+  resize: vertical;
+  height: calc(3 * 1.5em); /* Ajusta el alto para 3 filas (1.5em es un valor típico para line-height) */
+  line-height: 1.5em; /* Altura de cada línea */
+}
+.form [readonly] {
+  background-color: var(--text-body);
+  color: var(--opcion1);
+}
+
+.multiselect {
+  position: relative;
+  width: 250px;
+  font-family: Arial, sans-serif;
+}
+
+.multiselect .select-box {
+  cursor: pointer;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.multiselect .checkbox-list {
+  position: absolute;
+  width: 100%;
+  background: var(--opcion1);
+  border-radius: 5px;
+  box-shadow: var(--shadow1);
+  border: 1px solid var(--blanco);
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  z-index: 55;
+  right: 0;
+  top: 100%;
+}
+
+.multiselect .checkbox-list input[type="text"] {
+  width: 100%;
+  padding: 5px;
+  margin-bottom: 5px;
+  border: 1px solid var(--blanco);
+  border-radius: 3px;
+}
+
+.multiselect .checkbox-list label {
+  display: flex;
+  /*align-items: center;*/
+  gap: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.multiselect .hidden {
+  display: none;
+}
+.multiselect input[type="checkbox"]{
+  width: auto;
+}
+
+.btn-form button {
+  color: #fff;
+  border-radius: 0.35rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  font-weight: 600;
+}
+/* ================================== RESPONSIVE ================================== */
+.btn{
+  display: flex;
+  align-items: center;
+  border-radius: var(--borde-r-1);
+  padding: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn i{
+  font-size: 1.5rem;
+}
+.btn:hover {
+  filter: brightness(0.8);
+}
+
+/* ================================== RESPONSIVE ================================== */
+
+/* Móviles */
+@media (max-width: 480px) {
+  .dataTable-paginacion {
+    flex-direction: column;
+  }
+
+  .dataTable thead {
+    display: none;
+  }
+
+  .dataTable tbody,
+  .dataTable tr,
+  .dataTable td {
+    display: block;
+    width: 100%;
+  }
+
+  .dataTable tbody tr {
+    margin-bottom: 10px;
+    border: 1px solid var(--opcion2);
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+  .dataTable tbody td {
+    text-align: left;
+    display: flex;
+    padding: 8px 0;
+    gap: 1rem;
+  }
+
+  .dataTable tbody tr td:last-child {
+    border-bottom: none;
+  }
+
+  .dataTable tbody td:before {
+    content: attr(data-label);
+    font-weight: bold;
+    display: contents;
+    color: var(--azul2);
+  }
+
+  .search-filtro {
+    flex: 1;
+  }
+}
+
+/* Tabletas */
+@media (min-width: 481px) and (max-width: 768px) {
+  .search-filtro {
+    flex: 1;
+  }
+}
+/* Computadoras portátiles */
+@media (min-width: 769px) and (max-width: 1024px) {
+}
+
+/* Computadoras de escritorio y más grandes */
+@media (min-width: 1024px) {
+}

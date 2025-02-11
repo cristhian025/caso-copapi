@@ -1,0 +1,47 @@
+{% extends 'menu.html' %}
+
+{% block contenido %}
+<div class="card-modulo">
+    <div class="card-modulo-header">
+      <h3>Registrar Salida Transporte</h3>
+    </div>
+    <div class="card-modulo-body">
+        <h5>Selecciona un proyecto</h5>
+        <div id="contenedor-tabla-proyectos-salida-transporte"></div>
+    </div>
+</div>
+
+{% endblock %} 
+
+{% block modulos_js %}
+<script type="module">
+    import {DataTablePaginada} from "/static/js/componentes/index.js";
+
+    const tablaStock = new DataTablePaginada({
+      contenedor: "contenedor-tabla-proyectos-salida-transporte",
+      idTabla: "tb-proyectos-salida-transporte",
+      columnas: [
+        { campo: "id_proyecto", titulo: "Id proyecto" },
+        { campo: "nombre", titulo: "Proyecto" },
+        { campo: "fecha_inicio", titulo: "Fecha inicio" },
+        { campo: "estado", titulo: "Estado" },
+        { campo: "barrio", titulo: "Barrio" },
+        { campo: "cantidad_transporte", titulo: "Cantidad transporte" },
+        {
+          campo: "operacion",
+          titulo: "Operación",
+          render: (datos) => `<button type="button" class="btn-tb-opcion bg-verde-1" title="Seleccionar" onclick="seleccionar_proyecto(${datos.id_proyecto})">
+              <i class='bx bx-check-square'></i>
+            </button>`,
+        },
+      ],
+      placeholderBusqueda: "Buscar por proyecto o barrio",
+      urlDatos: `${URL_API}/transporte/obtener_proyectos_disponibles_salida`,
+    });
+
+    window.seleccionar_proyecto = function (id_proyecto) {
+        window.location.href = `${URL_API}/transporte/reg_salida_transporte/${id_proyecto}`;
+      };
+</script>
+
+{% endblock %}

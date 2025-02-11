@@ -1,0 +1,57 @@
+{% extends 'base_templates.html' %}
+
+{% block titulo %}
+<!--- Aqui va el titulo que tendra la pagina por ejemplo:
+        Este_es_un_titulo -->
+{% endblock %}
+
+{% block css %}
+    <!--- Aqui va el contenido que se quiere en el CSS por ejemplo: 
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/mi_archivo.css') }}">
+    -->
+{% endblock %}
+
+{% block contenido_body %}
+    <!--- Aqui va el contenido que se quiere en el body por ejemplo:
+    <form id="form_generico">
+        <input type="text" name="dato" id="dato">
+        <button type="submit">Enviar</button>
+    </form>
+    -->
+{% endblock %}
+
+{% block js %}
+    <!--- Aqui va el archivo js que tengas o tambien el script que quiera por ejemplo: -->
+    <!--- Contenido de script js 
+    <script src="{{ url_for('static', filename='js/general.js') }}"></script>
+    -->
+
+    <!--- O si lo que quieres es crear un script para cualquier otra cosa como llamar datos de una API:
+    <script>
+    document.getElementById('autentificar_usu').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var formData = {
+            usuario: document.getElementById('usuario').value,
+            password: document.getElementById('password').value
+        };
+        fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(respuesta => {
+            if (respuesta.exito) {
+                crearMensaje(respuesta.titulo, respuesta.mensaje, respuesta.redireccion);
+            } else {
+                crearMensaje(respuesta.titulo, respuesta.mensaje);
+            }
+        })
+        //.catch(error => console.error('Error:', error));
+    });
+    </script>
+    -->
+    
+{% endblock %}

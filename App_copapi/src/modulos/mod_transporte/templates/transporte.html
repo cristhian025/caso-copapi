@@ -1,0 +1,24 @@
+{% extends 'menu.html' %}
+
+{% block contenido %}
+<nav class="barra_nav">
+    <a href="/transporte/reg_transporte">
+        <div class="btn-nav color_nav-1">
+            <span class="material-icons-sharp">add</span>
+            <h3>Registrar Transporte</h3>
+        </div>
+    </a>
+    <a href="/transporte/reg_recepcion_transporte">
+        <div class="btn-nav color_nav-1">
+            <span class="material-icons-sharp">add</span>
+            <h3>Recepcion Transporte</h3>
+        </div>
+    </a>
+
+</nav>
+
+<section class="contenedor-modulo">
+    {% block contenedor_forms %}
+    {% endblock %}
+</section>
+{% endblock %}

@@ -1,0 +1,102 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cont_login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+    background: url("../imgs/logo.jpg") no-repeat;
+    background-size: 100% 100%; 
+    background-position: center; 
+}
+
+.cont_login form {
+    width: 420px;
+    margin: 0 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    /*backdrop-filter: blur(5px);*/
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    color: aliceblue;
+    border-radius: 10px;
+    padding: 30px 40px;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.cont_login form h1 {
+    font-size: 36px;
+    text-align: center;
+    color: #03a9f4;;
+}
+
+.cont_login .input-box {
+    width: 100%;
+    height: 50px;
+    margin: 30px 0;
+    position: relative;
+}
+
+.input-box input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    border: 2px solid #6c65f2;
+    border-radius: 0.5rem;
+    font-size: 16px;
+    color: #fff;
+    padding: 20px 45px 20px 20px;
+}
+
+.input-box input::placeholder {
+    color: #fff;
+}
+
+.cont_login button {
+    width: 100%;
+    height: 45px;
+    background: #6c65f2;
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    font-size: 16px;
+    color: #fff;
+    font-weight: 600;
+}
+
+.input-box label{
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    font-size: 16px;
+    pointer-events: none;
+    transition: .3s ease;
+    color: #fff;
+}
+
+.input-box #toggle-password{
+    position: absolute;
+    top: 50%;
+    left: 90%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    transition: .3s ease;
+    color: #fff;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.input-box input:focus~ label,
+.input-box input:valid~ label{
+    top: -5px;
+    background: #6c65f2;
+    padding: 0 5px;
+}

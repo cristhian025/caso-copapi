@@ -1,0 +1,153 @@
+{% extends 'menu.html' %} 
+{% block contenido %}
+<div class="card-modulo">
+  <div class="card-modulo-header">
+    <h3>Registrar Transporte</h3>
+    <a href="/transporte/reg_transporte" class="btn bg-rojo-2 color-rojo-1">
+      <i class="bx bx-chevrons-left"></i> Regresar
+    </a>
+  </div>
+
+  <div class="card-modulo-body">
+    <!-- Botón para alternar entre vistas -->
+    <button id="toggleVista" class="btn bg-opcion4 color-blanco">
+      <span id="text-btn-vista">Formulario</span>
+      <span id="cantidadLista" class="color-verde-3" style="margin-left: 0.5rem"
+        >(0)</span
+      >
+    </button>
+
+    <!-- Sección de selección de materiales -->
+    <div id="vista-seleccion">
+      <h5>Selecciona materiales</h5>
+      <div id="contenedor-tabla-stock"></div>
+    </div>
+
+    <!-- Sección del formulario (inicialmente oculta) -->
+    <div id="vista-formulario" style="display: none">
+      <h5>Formulario Transporte</h5>
+      <div id="contenedor-lista-stock" class="dataTable"></div>
+
+      <form id="form-reg_transporte" class="form" autocomplete="off">
+        <div class="input-group">
+          <label for="fecha_salida">Fecha de Salida:</label>
+          <input type="date" id="fecha_salida" name="fecha_salida" required />
+        </div>
+        <div class="btn-form">
+          <button type="submit" class="bg-verde-1">Confirmar</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %} 
+{% block modulos_js %}
+<script type="module">
+  import {
+    DataTablePaginada,
+    ListaTemporal,
+  } from "/static/js/componentes/index.js";
+
+  const tablaStock = new DataTablePaginada({
+    contenedor: "contenedor-tabla-stock",
+    idTabla: "tb-stock-transporte",
+    columnas: [
+      { campo: "material", titulo: "Material" },
+      { campo: "tipo_material", titulo: "Tipo material" },
+      { campo: "deposito", titulo: "Deposito" },
+      { campo: "cantidad_material", titulo: "Cantidad" },
+      {
+        campo: "operacion",
+        titulo: "Operación",
+        render: (
+          datos
+        ) => `<button type="button" class="btn-tb-opcion bg-verde-1" data-datos='${JSON.stringify(
+          datos
+        )}' title="Seleccionar" onclick="seleccionar_stock(this)">
+            <i class='bx bx-check-square'></i>
+          </button>`,
+      },
+    ],
+    placeholderBusqueda: "Buscar por Material o deposito",
+    urlDatos: `${URL_API}/transporte/obtener_stock`,
+  });
+
+  const listaTemporal = new ListaTemporal({
+    contenedor: "contenedor-lista-stock",
+    idLista: "lista-stock",
+    columnas: [
+      { campo: "material", titulo: "Material" },
+      { campo: "tipo_material", titulo: "Tipo Material" },
+      { campo: "deposito", titulo: "Depósito" },
+    ],
+    datos: [],
+  });
+
+  window.seleccionar_stock = function (btn_datos) {
+    const datos = JSON.parse(btn_datos.getAttribute("data-datos"));
+    listaTemporal.agregarElemento(datos);
+    actualizarCantidadLista();
+  };
+
+  document.getElementById("contenedor-lista-stock").addEventListener("click", function (e) {
+      actualizarCantidadLista();
+    });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const btnToggle = document.getElementById("toggleVista");
+    const cantidadLista = document.getElementById("cantidadLista");
+    const textbtnvista = document.getElementById("text-btn-vista");
+    const vistaSeleccion = document.getElementById("vista-seleccion");
+    const vistaFormulario = document.getElementById("vista-formulario");
+
+    btnToggle.addEventListener("click", function () {
+      cantidadLista.innerHTML = `(${listaTemporal.datos.length})`;
+      if (vistaSeleccion.style.display === "none") {
+        vistaSeleccion.style.display = "block";
+        vistaFormulario.style.display = "none";
+        textbtnvista.innerHTML = `Formulario`;
+      } else {
+        vistaSeleccion.style.display = "none";
+        vistaFormulario.style.display = "block";
+        textbtnvista.innerHTML = `Selección`;
+      }
+    });
+  });
+
+  window.actualizarCantidadLista = function () {
+    cantidadLista.textContent = `(${listaTemporal.datos.length})`;
+  };
+
+  document.getElementById("form-reg_transporte").addEventListener("submit", async (event) => {
+      event.preventDefault(); // Evita la recarga de la página
+
+      const form = event.target;
+      const formData = new FormData(form);
+      let lista_materiales = Array.isArray(listaTemporal?.datos)
+        ? listaTemporal.datos
+        : [];
+      formData.append("lista_materiales", JSON.stringify(lista_materiales));
+      const id_proyecto = parseInt("{{id_proyecto}}");
+      try {
+        const response = await fetch(
+          `${URL_API}/transporte/reg_transporte/${id_proyecto}`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const respuesta = await response.json();
+        if (respuesta.exito) {
+          crearMensaje(respuesta.titulo,respuesta.mensaje,respuesta.redireccion
+          );
+        } else {
+          crearMensaje(respuesta.titulo, respuesta.mensaje);
+        }
+      } catch (error) {
+        console.error("Error en la petición:", error);
+      }
+    });
+</script>
+{% endblock %}

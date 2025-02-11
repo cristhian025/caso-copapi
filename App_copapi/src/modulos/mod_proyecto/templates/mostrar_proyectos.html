@@ -1,0 +1,56 @@
+{% extends 'menu.html' %}
+{% block contenido %}
+<div class="card-modulo">
+  <div class="card-modulo-header">
+    <h3>Lista de Proyectos</h3>
+  </div>
+  <div class="card-modulo-body">
+    <div id="contenedor-tabla-mostrar-proyectos"></div>
+  </div>
+</div>
+{% endblock %}
+
+{% block modulos_js %}
+
+<script type="module">
+  import { DataTablePaginada } from "/static/js/componentes/index.js";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    new DataTablePaginada({
+      contenedor: "contenedor-tabla-mostrar-proyectos",
+      idTabla: "tb-mostrar-proyectos",
+      columnas: [
+        { campo: "id", titulo: "Id" },
+        { campo: "nombre", titulo: "Proyecto" },
+        { campo: "fecha_inicio", titulo: "Fecha inicio" },
+        { campo: "fecha_fin", titulo: "Fecha fin" },
+        { 
+          campo: "estado", 
+          titulo: "Estado",
+          render: (datos) => datos.estado === 'A' ? 'Activo' : datos.estado === 'C' ? 'Cancelado' : 'Finalizado'
+        },
+        { campo: "barrio", titulo: "Barrio" },
+        { campo: "servicios", titulo: "Servicios" },
+        { 
+          campo: "operacion",
+          titulo: "Operación", 
+          render: (datos) => datos.estado === 'A' 
+            ? `<button type="button" class="btn-tb-opcion bg-amarillo-1" onclick="modificar_proyecto(${datos.id})" title="Modificar">
+                 <i class='bx bx-edit'></i>
+               </button>` 
+            : ''
+        },
+      ],
+      placeholderBusqueda: "Buscar por Nombre o barrio",
+      urlDatos: `${URL_API}/proyecto/obtener_proyectos`,
+    });
+
+  });
+</script>
+
+<script>
+  function modificar_proyecto(id) {
+    window.location.href = `${URL_API}/proyecto/modificar_proyecto/${id}`;
+  }
+</script>
+{% endblock %}

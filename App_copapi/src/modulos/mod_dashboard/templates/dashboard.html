@@ -1,0 +1,173 @@
+{% extends 'menu.html' %}
+
+{% block contenido %}
+<div class="card-modulo">
+    <div class="card-modulo-header">
+        <h3>Materiales ingresados a stock</h3>
+    </div>
+    <div class="card-modulo-body">
+        <canvas id="chartMaterialesIngresados"></canvas>
+    </div>
+</div>
+
+<div class="card-modulo">
+    <div class="card-modulo-header">
+        <h3>Materiales enviados a proyectos</h3>
+    </div>
+    <div class="card-modulo-body">
+        <canvas id="chartMaterialesEnviados"></canvas>
+    </div>
+</div>
+
+<div class="card-modulo">
+    <div class="card-modulo-header">
+        <h3>Stock</h3>
+    </div>
+    <div class="card-modulo-body">
+        <canvas id="chartStock"></canvas>
+    </div>
+</div>
+{% endblock %}
+
+{% block modulos_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    cargarDatos();
+});
+
+async function cargarDatos() {
+    await cargarMaterialesIngresados();
+    await cargarMaterialesEnviados();
+    await cargarStock();
+}
+
+async function cargarMaterialesIngresados() {
+    try {
+        const response = await fetch(`${URL_API}/dashboard/reportes/materiales_ingresados`);
+        const data = await response.json();
+        const registros = data.registros;
+
+        const labels = registros.map(item => item.fecha_programada);
+        const valores = registros.map(item => item.cantidad_material);
+
+        const ctx = document.getElementById("chartMaterialesIngresados").getContext("2d");
+        new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Materiales Ingresados",
+                    data: valores,
+                    backgroundColor: "rgba(54, 162, 235, 0.6)"
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    } catch (error) {
+        console.error("Error cargando materiales ingresados:", error);
+    }
+}
+
+async function cargarMaterialesEnviados() {
+    try {
+        const response = await fetch(`${URL_API}/dashboard/reportes/materiales_enviados`);
+        const data = await response.json();
+        const registros = data.registros;
+
+        const labels = registros.map(item => item.salida_programada);
+        const valores = registros.map(item => item.total_material);
+
+        const ctx = document.getElementById("chartMaterialesEnviados").getContext("2d");
+        new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Materiales Enviados",
+                    data: valores,
+                    borderColor: "rgba(255, 99, 132, 1)",
+                    backgroundColor: "rgba(255, 99, 132, 0.2)",
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    } catch (error) {
+        console.error("Error cargando materiales enviados:", error);
+    }
+}
+
+async function cargarStock() {
+    try {
+        const response = await fetch(`${URL_API}/dashboard/reportes/stock`);
+        const data = await response.json();
+        const registros = data.registros;
+
+        const labels = registros.map(item => item.material);
+        const valores = registros.map(item => item.cantidad_material);
+        const totalMateriales = labels.length;
+
+        const baseColores = [
+            "rgb(99, 132, 255)",   // Azul claro
+            "rgb(255, 159, 64)",   // Naranja
+            "rgb(153, 102, 255)",  // Púrpura
+            "rgb(255, 99, 132)",   // Rojo claro
+            "rgb(75, 192, 192)",   // Verde claro
+            "rgb(255, 205, 86)",   // Amarillo
+        ];
+
+        // Función para generar variaciones de colores a partir de la paleta base
+        function generarVariacionesDeColor(baseColor, cantidad) {
+            const colorVariations = [];
+            const [r, g, b] = baseColor.match(/\d+/g).map(Number);
+
+            for (let i = 0; i < cantidad; i++) {
+                // Ajustamos la saturación o el brillo ligeramente para obtener diferentes tonos
+                const variation = `rgba(${Math.min(r + i * 10, 255)}, ${Math.min(g + i * 10, 255)}, ${Math.min(b + i * 10, 255)}, 0.6)`;
+                colorVariations.push(variation);
+            }
+
+            return colorVariations;
+        }
+
+        // Si hay más colores que los de la paleta base, podemos repetir la paleta base
+        const colores = [];
+        let colorIndex = 0;
+        for (let i = 0; i < totalMateriales; i++) {
+            colores.push(...generarVariacionesDeColor(baseColores[colorIndex], 1));
+            colorIndex = (colorIndex + 1) % baseColores.length; // Cicla sobre los colores base
+        }
+
+        const coloresFinales = colores.slice(0, totalMateriales);
+
+        // Configuramos la gráfica de pie (pie chart)
+        const ctx = document.getElementById("chartStock").getContext("2d");
+        new Chart(ctx, {
+            type: "pie",
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Stock de Materiales",
+                    data: valores,
+                    backgroundColor: coloresFinales // Colores generados
+                }]
+            },
+            options: {
+                responsive: true, 
+                maintainAspectRatio: false
+            }
+        });
+    } catch (error) {
+        console.error("Error cargando stock:", error);
+    }
+}
+
+</script>
+{% endblock %}

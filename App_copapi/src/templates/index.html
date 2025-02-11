@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--- Contenido de titulo de pagina -->
+    <title>{% block titulo %}titulo de App{% endblock %}</title>
+    <!--- Iconos que se usaran -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!--- Contenido de estilos css -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/principal.css') }}">
+    {% block css %}{% endblock %}
+</head>
+<body>
+    <div class="popup-overlay" id="popup-overlay"></div>
+    <div class="cont_mensaje" id="mensaje"></div>
+    <!--- Contenido de body -->
+    {% block contenido_body %}{% endblock %}
+    <!--- Contenido de script js -->
+    <script src="{{ url_for('static', filename='js/principal.js') }}"></script>
+    {% block js %}{% endblock %}
+</body>
+</html>

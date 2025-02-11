@@ -1,0 +1,85 @@
+{% extends 'menu.html' %}
+
+{% block contenido %}
+<div class="card-modulo">
+    <div class="card-modulo-header">
+      <h3>Reporte de Materiales Igresados a Stock</h3>
+    </div>
+    <div class="card-modulo-body">
+        <form id="form_materiales_ingresados" class="form" autocomplete="off">
+            <div class="input-group">
+                <label for="fecha_inicio">Fecha de inicio:</label>
+                <input type="date" id="fecha_inicio" name="fecha_inicio" required>
+            </div>
+            <div class="input-group">
+                <label for="fecha_fin">Fecha de fin:</label>
+                <input type="date" id="fecha_fin" name="fecha_fin" required>
+            </div>
+    
+            <div class="input-group">
+                <label for="estado_ingreso">Estado de ingreso:</label>
+                <select id="estado_ingreso" name="estado_ingreso">
+                    <option value="">Todos</option>
+                    <option value="E">Entregado</option>
+                    <option value="A">Activo</option>
+                    <option value="C">Cancelado</option>
+                </select>
+          </div>
+          
+          <div class="input-group">
+            <label for="minimo_material_total">Mínimo material enviado:</label>
+            <input type="number" id="minimo_material_total" name="minimo_material_total" min="0" value="0" required>
+          </div>
+    
+            <div class="btn-form" style="gap: 0.5rem;">
+                <button onclick="descargarReporte('excel', event)" class="bg-verde-1">Descargar Excel</button>
+                <button onclick="descargarReporte('pdf', event)" class="bg-rojo-1">Descargar PDF</button>
+            </div>
+          </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block modulos_js %}
+<script>
+    function descargarReporte(tipo, event) {
+        event.preventDefault();
+
+        const form = document.getElementById("form_materiales_ingresados");
+
+        // Validar que todos los campos requeridos estén completos
+        if (!form.checkValidity()) {
+            alert("Por favor, complete todos los campos requeridos antes de generar el reporte.");
+            return;
+        }
+
+        const formData = new FormData(form);
+
+        fetch(`${URL_API}/reporte/materiales_ingresados/${tipo}`, {
+            method: "POST",
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => { throw new Error(err.error); });
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            const fechaActual = new Date().toISOString().split('T')[0];
+            a.href = url;
+            a.download = `Reporte_Materiales_Ingresados_${fechaActual}.${tipo === "excel" ? "xlsx" : "pdf"}`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        })
+        .catch(error => {
+            crearMensaje("error", error.message);
+        });
+    }
+</script>
+{% endblock %}
+

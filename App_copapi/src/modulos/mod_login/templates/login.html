@@ -1,0 +1,61 @@
+{% extends 'index.html' %}
+
+{% block titulo %}Login{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
+{% block contenido_body %}
+<div class="cont_login">
+    <form id="form-login" autocomplete="off">
+        <h1>Iniciar Sesion</h1>
+        <div class="input-box">
+            <input type="text" id="usuario" name="usuario" required>
+            <label>Usuario</label>
+        </div>
+        <div class="input-box">
+            <input type="password" id="password" name="password" required>
+            <label>Contraseña</label>
+            <span id="toggle-password" class="bx bx-hide"></span>
+        </div>
+        <button type="submit">INGRESAR</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+    const passwordInput = document.getElementById('password');
+    const togglePassword = document.getElementById('toggle-password');
+
+    togglePassword.addEventListener('click', function () {
+        const type = passwordInput.type === 'password' ? 'text' : 'password';
+        passwordInput.type = type;
+
+        togglePassword.classList.toggle('bx-show');
+        togglePassword.classList.toggle('bx-hide');
+    });
+
+    document.getElementById('form-login').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const form = event.target;
+        const formData = new FormData(form);
+        
+        try {
+            const response = await fetch(`${URL_API}/login`, {
+                method: 'POST',
+                body: formData
+            });
+            const respuesta = await response.json();
+            if (respuesta.exito) {
+                crearMensaje(respuesta.titulo, respuesta.mensaje, respuesta.redireccion);
+            } else {
+                crearMensaje(respuesta.titulo, respuesta.mensaje);
+            }
+        } catch (error) {
+            console.error('Error en la petición:', error);
+        }
+    });
+</script>
+{% endblock %}

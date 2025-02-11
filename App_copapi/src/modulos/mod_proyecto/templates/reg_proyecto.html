@@ -1,0 +1,82 @@
+{% extends 'menu.html' %}
+
+{% block contenido %}
+<div class="card-modulo">
+    <div class="card-modulo-header">
+      <h3>Registrar Proyecto</h3>
+    </div>
+    <div class="card-modulo-body">
+        <form id="form-reg_proyecto" class="form" autocomplete="off">
+            <div class="input-group">
+                <label for="nombre">Nombre del Proyecto:</label>
+                <input type="text" id="nombre" name="nombre" required>
+            </div>
+            <div class="input-group">
+                <label for="fecha_inicio">Fecha de Inicio:</label>
+                <input type="date" id="fecha_inicio" name="fecha_inicio" required>
+            </div>
+            
+            <div class="input-group">
+                <label for="id_barrio">Barrio:</label>
+                <select id="id_barrio" name="id_barrio" required></select>
+            </div>
+            
+            <div class="input-group">
+                <span class="label">Seleccione Servicios:</span>
+                <div id="servicios" class="multiselect"></div>
+            </div>
+
+            <div class="btn-form">
+                <button type="submit" class="bg-verde-1">Confirmar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block modulos_js %}
+
+<script type="module">
+    import { SelectOption, MultiSelect } from "/static/js/componentes/index.js";
+  
+    document.addEventListener("DOMContentLoaded", () => {
+        new SelectOption({
+            urlDatos: `${URL_API}/proyecto/obtener_barrios`,
+            idSelect: 'id_barrio',
+            placeholder: 'Seleccione un barrio'
+        });
+
+        new MultiSelect({
+            idContenedor: "servicios",
+            name: "id_servicios",
+            urlDatos: `${URL_API}/proyecto/obtener_servicios`
+        });
+
+    });
+</script>
+
+<script>
+    document.getElementById("form-reg_proyecto").addEventListener("submit", async (event) => {
+        event.preventDefault(); // Evita la recarga de la página
+    
+        const form = event.target;
+        const formData = new FormData(form);
+        try {
+            const response = await fetch(`${URL_API}/proyecto/reg_proyecto`, {
+                method: "POST",
+                body: formData
+            });
+            const respuesta = await response.json();
+            if (respuesta.exito) {
+                crearMensaje(respuesta.titulo, respuesta.mensaje, respuesta.redireccion);
+            } else {
+                crearMensaje(respuesta.titulo, respuesta.mensaje);
+            }
+        } catch (error) {
+            console.error("Error en la petición:", error);
+        }
+
+    });
+</script>
+{% endblock %}

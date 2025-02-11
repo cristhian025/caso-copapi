@@ -1,0 +1,60 @@
+{% extends 'menu.html' %}
+
+{% block contenido %}
+<div class="card-modulo">
+    <div class="card-modulo-header">
+      <h3>Registrar Transporte</h3>
+    </div>
+    <div class="card-modulo-body">
+        <h5>Selecciona un proyecto</h5>
+        <div id="contenedor-tabla-proyectos-transporte"></div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block modulos_js %}
+
+<script type="module">
+    import { DataTablePaginada } from "/static/js/componentes/index.js";
+  
+    document.addEventListener("DOMContentLoaded", () => {
+      new DataTablePaginada({
+        contenedor: "contenedor-tabla-proyectos-transporte",
+        idTabla: "tb-proyectos-transporte",
+        columnas: [
+          { campo: "id", titulo: "Id" },
+          { campo: "nombre", titulo: "Proyecto" },
+          { campo: "fecha_inicio", titulo: "Fecha inicio" },
+          { 
+            campo: "estado", 
+            titulo: "Estado",
+            render: (datos) => datos.estado === 'A' ? 'Activo' : datos.estado === 'C' ? 'Cancelado' : 'Finalizado'
+          },
+          { campo: "barrio", titulo: "Barrio" },
+          { 
+            campo: "operacion",
+            titulo: "Operación", 
+            render: (datos) => datos.estado === 'A' 
+              ? `<button type="button" class="btn-tb-opcion bg-verde-1" onclick="reg_transporte_fase_2(${datos.id})" title="Seleccionar">
+                  <i class='bx bx-check-square'></i>
+                 </button>` 
+              : ''
+          },
+        ],
+        placeholderBusqueda: "Buscar por Nombre o barrio",
+        urlDatos: `${URL_API}/proyecto/obtener_proyectos`,
+        filtros: {
+            estado: 'A'
+        }
+      });
+  
+    });
+  </script>
+  
+  <script>
+    function reg_transporte_fase_2(id) {
+      window.location.href = `${URL_API}/transporte/reg_transporte/${id}`;
+    }
+  </script>
+{% endblock %}

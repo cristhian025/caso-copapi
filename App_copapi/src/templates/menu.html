@@ -1,0 +1,123 @@
+{% extends 'index.html' %}
+
+{% block titulo %}Menu{% endblock %}
+
+{% block css %}
+
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/menu.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/componentes.css') }}">
+{% endblock %}
+
+{% block contenido_body %}
+
+<div class="cont_pantalla_emergente" id="cont_pantalla_emergente">
+    {% block contenido_pantalla_emergente %}
+    {% endblock %}
+</div>
+
+<div class="contenedor-principal">
+    <header class="header-contenedor">
+        <a href="/" class="header-empresa">Copapi</a>
+        
+        <ul class="header-opciones">
+            <li>
+                <button href="#" class="btn-header-opciones" id="btn-darkmode"><i class='bx bx-moon' ></i></button>
+            </li>
+
+            <li>
+                <button href="#" class="btn-header-opciones" id="btn-usuario"><i class='bx bx-user'></i></button>
+
+                <div class="header-sub-opcion close">
+                    <div class="datos-usuario" >
+                        <span>{{ session['datos_usuario'].nombres }}</span>
+                        <small>{{ session['datos_usuario'].rol }}</small>
+                    </div>
+                    <a class="btn-sub-opcion" href="/cerrar_sesion" id="btn-cerrar-sesion"><i class="bx bx-log-out"></i> Cerrar Sesión</a>
+                </div>
+            </li> 
+        </ul>
+    </header>
+
+    <main class="main-contenedor">
+        <div class="main-agrupador">
+            <button type="button" class="btn-aside-menu" id="btn-aside-menu"><i class='bx bx-menu-alt-left'></i></button>
+
+            <aside class="aside-menu open">
+                <div class="aside-agrupador">
+                    <ul>
+                        <li>
+                            <a href="/dashboard"><i class='bx bx-home'></i><span class="text">Dashboard</span></a>
+                        </li>
+
+                        <li>
+                            <a href="#"><i class='bx bx-briefcase-alt'></i><span class="text">Proyectos</span><i class='bx bx-caret-down'></i></a>
+                            <ul class="sub-menu">
+                                <li>
+                                    <a href="/proyecto/mostrar_proyectos"><span class="text">Mostrar Proyectos</span></a>
+                                </li>
+                                <li>
+                                    <a href="/proyecto/reg_proyecto"><span class="text">Registrar Proyectos</span></a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#"><i class='bx bxs-truck'></i><span class="text">Transporte</span><i class='bx bx-caret-down'></i></a>
+                            <ul class="sub-menu">
+                                <li>
+                                    <a href="/transporte/reg_transporte"><span class="text">Registrar Transporte</span></a>
+                                </li> 
+                                <li>
+                                    <a href="/transporte/reg_salida_transporte"><span class="text">Registrar Salida Transporte</span></a>
+                                </li>
+                                <li>
+                                    <a href="/transporte/reg_recepcion_transporte"><span class="text">Registrar Recepcion Transporte</span></a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#"><i class='bx bx-pie-chart-alt'></i><span class="text">Stock</span><i class='bx bx-caret-down'></i></a>
+                            <ul class="sub-menu">
+                                <li>
+                                    <a href="/stock/reg_stock"><span class="text">Registrar Stock</span></a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#"><i class='bx bx-bar-chart-alt'></i><span class="text">Reportes</span><i class='bx bx-caret-down'></i></a>
+                            <ul class="sub-menu">
+                                <li>
+                                    <a href="/reporte/materiales_ingresados"><span class="text">Materiales Ingresados</span></a>
+                                </li>
+                                <li>
+                                    <a href="/reporte/materiales_enviados"><span class="text">Materiales Enviados</span></a>
+                                </li>
+                                <li>
+                                    <a href="/reporte/reporte_stock"><span class="text">Reporte Stock</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+
+            <main class="main-modulos">
+                <div class="modulo-contenedor">
+                    {% block contenido %}
+                    <!-- Contenido de cada página se insertará aquí -->
+                    {% endblock %}
+                </div>
+            </main>
+        </div>
+    </main>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/menu.js') }}"></script>
+    {% block modulos_js %}
+    {% endblock %}
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends 'menu.html' %}
+
+{% block contenido %}
+<div class="card-modulo">
+    <div class="card-modulo-header">
+      <h3>Modificar Proyecto</h3> <a href="/proyecto/mostrar_proyectos" class="btn bg-rojo-2 color-rojo-1"><i class="bx bx-chevrons-left"></i> Regresar</a>
+    </div>
+    <div class="card-modulo-body">
+        <form id="form-mod-proyecto" class="form">
+            {% set datos_proyecto = datos['registros'] %}
+
+            <div class="input-group">
+                <label for="id">Id del Proyecto:</label>
+                <input type="number" id="id" name="id" value="{{ datos_proyecto.id }}" readonly>
+            </div>
+            <div class="input-group">
+                <label for="nombre">Nombre del Proyecto:</label>
+                <input type="text" id="nombre" name="nombre" value="{{ datos_proyecto.nombre }}" required>
+            </div>
+            <div class="input-group">
+                <label>Fecha_inicio:</label>
+                <input type="text" name="fecha_inicio" id="fecha_inicio" value="{{ datos_proyecto.fecha_inicio }}" readonly>
+            </div>
+            <div class="input-group">
+                <label for="estado">Estado:</label>
+                <select id="estado" name="estado" required>
+                    <option value="A" {% if datos_proyecto.estado == 'A' %} selected {% endif %}>Activo</option>
+                    <option value="C" {% if datos_proyecto.estado == 'C' %} selected {% endif %}>Cancelado</option>
+                    <option value="F" {% if datos_proyecto.estado == 'F' %} selected {% endif %}>Finalizado</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Barrio:</label> 
+                <input type="text" name="barrio" id="barrio" value="{{ datos_proyecto.barrio }}" readonly>
+            </div>
+            <div class="input-group-full">
+                <label>Servicios:</label>
+                <textarea name="servicios" id="servicios" readonly>{{ datos_proyecto.servicios }}</textarea>
+            </div>
+            <div class="btn-form">
+                <button type="submit" class="bg-verde-1">Confirmar</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block modulos_js %}
+<script>
+    document.getElementById('form-mod-proyecto').addEventListener('submit', async (event) => {
+        event.preventDefault(); // Evita la recarga de la página
+        
+        const form = event.target;
+        const formData = new FormData(form);
+        const data_id = parseInt(formData.get('id'));
+        
+        try {
+            const response = await fetch(`${URL_API}/proyecto/modificar_proyecto/${data_id}`, {
+                method: 'PUT',
+                body: formData
+            });
+            const respuesta = await response.json();
+            if (respuesta.exito) {
+                crearMensaje(respuesta.titulo, respuesta.mensaje, respuesta.redireccion);
+            } else {
+                crearMensaje(respuesta.titulo, respuesta.mensaje);
+            }
+        } catch (error) {
+            console.error('Error en la petición:', error);
+        }
+    });
+</script>
+
+
+{% endblock %}

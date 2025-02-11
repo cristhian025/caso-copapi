@@ -1,0 +1,328 @@
+:root {
+  --bg-body: #d1d1e9;
+
+  --opcion1: #fff;
+  --opcion2: #d1d1e9;
+  --opcion3: #f0f0f0;
+  --opcion4: #7166df;
+
+  --blue1: #4663de;
+  --rojo1: #FF0060;
+  --bg-btn-usuario: #4663de96;
+
+  --text-xl: 1.25rem;
+  --text-body: #101828;
+  --text-opcion1: #7d8da1;
+  --text-opcion2: #7166df;
+
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --shadow1: 0 10px 15px -3px var(--shadow-color), 0 4px 6px -4px var(--shadow-color);
+}
+
+body.dark {
+  --bg-body: #3c3e58;
+  --text-body: #f9f9f9;
+  --opcion1: #313348;
+  --opcion2: #474a72;
+  --opcion3: #3c3e5847;
+
+  --text-opcion1: #89879f;
+  --shadow-color: rgba(0, 0, 0, 0.4);
+}
+
+body {
+  display: none;
+  /* ------------------------------------------------------------ !importante*/
+  background-color: var(--bg-body);
+  color: var(--text-body);
+}
+
+.contenedor-principal {
+  min-height: 100vh;
+  display: flex;
+}
+
+.header-contenedor {
+  display: flex;
+  position: fixed;
+  justify-content: space-between;
+  height: 72px;
+  background-color: var(--opcion1);
+  width: 100vw;
+  z-index: 5;
+  padding: 1rem;
+  align-items: center;
+  box-shadow: var(--shadow1);
+}
+
+.header-empresa {
+  color: var(--blue1);
+  font-weight: bold;
+  font-size: var(--text-xl);
+}
+
+.header-opciones {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.header-opciones .btn-header-opciones {
+  padding: 0.5rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  font-size: 1.2rem;
+  background-color: var(--opcion2);
+  color: var(--text-opcion2);
+  box-shadow: var(--shadow1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.header-sub-opcion {
+  display: none;
+  position: absolute;
+  padding: 0.7rem 0;
+  top: 100%;
+  right: 0;
+  width: 12rem;
+  box-shadow: 0 0 8px rgba(8, 21, 66, 0.05);
+  background-color: var(--opcion1);
+  color: var(--text-body);
+  border-radius: 0.3rem;
+  z-index: 6;
+}
+
+.header-sub-opcion.open {
+  display: block;
+}
+
+.header-sub-opcion a {
+  color: var(--text-body);
+  padding: 0.5rem 1rem;
+}
+
+.header-sub-opcion .btn-sub-opcion {
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.header-sub-opcion .btn-sub-opcion:hover {
+  background-color: var(--opcion3);
+}
+
+.header-sub-opcion .datos-usuario {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--opcion2);
+  padding: 0 1rem 0.5rem;
+}
+
+.header-sub-opcion .datos-usuario span {
+  color: var(--text-body);
+  font-weight: 600;
+}
+
+.header-sub-opcion .datos-usuario small {
+  color: var(--text-opcion1);
+}
+
+#btn-usuario {
+  background-color: var(--bg-btn-usuario);
+}
+
+.btn-sub-opcion .bx-log-out {
+  color: var(--rojo1);
+}
+
+/*============================================================*/
+.main-contenedor {
+  flex: 1;
+  margin-top: 72px;
+  overflow: hidden;
+  z-index: 3;
+}
+
+.main-agrupador {
+  display: flex;
+  height: calc(100vh - 72px);
+}
+
+.aside-menu {
+  overflow-y: auto;
+  display: block;
+  /*position: static;*/
+  position: fixed;
+  background-color: var(--opcion1);
+  box-shadow: var(--shadow1);
+  width: 200px;
+  height: calc(100vh - 72px);
+  z-index: 1;
+}
+
+.aside-agrupador {
+  /*background-color: var(--opcion1);*/
+  /*border-radius: 0.3rem;*/
+  padding: 0.5rem;
+  /*height: 100%;*/
+}
+
+.main-modulos {
+  width: 100%;
+  overflow-y: auto;
+  margin-left: 200px;
+}
+
+
+
+/*============================================================*/
+
+.menu ul li {
+  position: relative;
+  list-style: none;
+  margin-bottom: 5px;
+}
+
+.aside-agrupador ul li a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-body);
+  text-decoration: none;
+  padding: 12px 8px;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+
+.aside-agrupador ul li a i {
+  font-size: 1.10rem;
+}
+
+.aside-agrupador ul li>a:hover,
+.aside-agrupador ul li.active>a {
+  background-color: var(--opcion4);
+  color: var(--opcion1);
+}
+
+.aside-agrupador ul li .icon {
+  font-size: 20px;
+}
+
+.aside-agrupador ul li .text {
+  flex: 1;
+}
+
+.aside-agrupador ul li .bx-caret-down {
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+.aside-agrupador ul li.active .bx-caret-down {
+  transform: rotate(180deg);
+}
+
+.aside-agrupador .sub-menu {
+  display: none;
+  margin-left: 15px;
+  padding-left: 5px;
+  padding-top: 5px;
+  border-left: 1px solid var(--opcion2);
+}
+
+.aside-agrupador .sub-menu li a {
+  padding: 10px 8px;
+  font-size: 12px;
+}
+
+
+/*===============================================================================================*/
+.btn-aside-menu {
+  display: none;
+  padding: 0.5rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  font-size: 1.2rem;
+  background-color: var(--opcion4);
+  color: var(--opcion1);
+  box-shadow: var(--shadow1);
+  justify-content: center;
+  align-items: center;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 1;
+}
+
+.modulo-contenedor{
+  padding: 1rem;
+  overflow-y: auto;
+  height: -webkit-fill-available;
+}
+
+/*===============================================================================================*/
+/* Móviles */
+@media (max-width: 480px) {
+  .btn-aside-menu {
+    display: block;
+    position: fixed;
+  }
+  
+  .aside-menu {
+    transition: transform 0.3s ease-in-out;
+  }
+  .aside-menu.close {
+    transform: translateX(-100%);
+    display: none;
+  }
+  .aside-menu.open {
+    transform: translateX(0);
+    height: calc(100vh - 72px);
+    position: fixed;
+  }
+  .main-modulos{
+    margin-left: 0;
+  }
+
+}
+
+/* Tabletas */
+@media (min-width: 481px) and (max-width: 768px) {
+  .btn-aside-menu {
+    display: block;
+    position: fixed;
+  }
+  
+  .aside-menu {
+    transition: transform 0.3s ease-in-out;
+  }
+  .aside-menu.close {
+    transform: translateX(-100%);
+    display: none;
+  }
+  .aside-menu.open {
+    transform: translateX(0);
+    height: calc(100vh - 72px);
+    position: fixed;
+  }
+  .main-modulos{
+    margin-left: 0;
+  }
+
+}
+
+/* Computadoras portátiles */
+@media (min-width: 769px) and (max-width: 1024px) {
+
+}
+
+/* Computadoras de escritorio y más grandes */
+@media (min-width: 1024px) {
+
+}

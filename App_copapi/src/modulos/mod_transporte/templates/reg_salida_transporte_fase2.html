@@ -1,0 +1,151 @@
+{% extends 'menu.html' %}
+
+{% block contenido %}
+<div class="card-modulo">
+    <div class="card-modulo-header">
+      <h3>Registrar Salida Transporte</h3>
+      <a href="/transporte/reg_salida_transporte" class="btn bg-rojo-2 color-rojo-1">
+        <i class="bx bx-chevrons-left"></i> Regresar
+      </a>
+    </div>
+    <div class="card-modulo-body">
+        <h5>Selecciona un Transporte de proyecto a salir</h5>
+        <div id="contenedor-tabla-salida-transporte"></div>
+    </div>
+</div>
+
+<div class="card-modulo">
+    <div class="card-modulo-body">
+        <h5>Formulario Transporte</h5>
+            <div id="contenedor-tabla-detalle-transporte"></div>
+      
+            <form id="form-salida_transporte" class="form" autocomplete="off">
+              <div class="input-group">
+                <label for="id_transporte">Id transporte</label>
+                <input type="number" name="id_transporte" id="id_transporte" required readonly>
+              </div>
+              <div class="input-group">
+                <label for="observacion">Observacion</label>
+                <input type="text" name="observacion" id="observacion">
+              </div>
+
+              <div class="input-group">
+                <label for="placa_vehiculo">Vehículos</label>
+                <select id="placa_vehiculo" name="placa_vehiculo" required>
+                    {% if select_vehiculos['registros'] %}
+                        {% for vehiculo in select_vehiculos['registros'] %}
+                            <option value="{{ vehiculo['id'] }}">{{ vehiculo['nombre'] }}</option>
+                        {% endfor %}
+                    {% else %}
+                        <option disabled>No disponibles</option>
+                    {% endif %}
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <label for="id_chofer">Choferes</label>
+                <select id="id_chofer" name="id_chofer" required>
+                    {% if select_choferes['registros'] %}
+                        {% for chofer in select_choferes['registros'] %}
+                            <option value="{{ chofer['id'] }}">{{ chofer['nombre'] }}</option>
+                        {% endfor %}
+                    {% else %}
+                        <option disabled>No disponibles</option>
+                    {% endif %}
+                </select>
+            </div>
+
+              <div class="btn-form">
+                <button type="submit" class="bg-verde-1">Confirmar</button>
+              </div>
+            </form>
+          </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block modulos_js %}
+
+<script type="module">
+    import {DataTable} from "/static/js/componentes/index.js";
+
+    const id_proyecto = parseInt("{{id_proyecto}}");
+    cargarDatosTransporteProyectoSalida();
+    async function cargarDatosTransporteProyectoSalida() {
+        try {
+            const response = await fetch(`${URL_API}/transporte/obtener_transportes_proyecto_salida/${id_proyecto}`);
+            const data = await response.json();
+            const tb_recepcion_transporte = new DataTable({
+                contenedor: 'contenedor-tabla-salida-transporte', 
+                idTabla: 'tb-salida-transporte', 
+                columnas: [
+                    { campo: "id", titulo: "Id transporte" },
+                    //{ campo: "proyecto", titulo: "Proyecto" },
+                    { campo: "fecha_salida", titulo: "Fecha salida" },
+                    {
+                    campo: "operacion",
+                    titulo: "Operación",
+                    render: (datos) => `<button type="button" class="btn-tb-opcion bg-verde-1" title="Seleccionar" onclick="seleccionar_transporte(${datos.id})">
+                        <i class='bx bx-check-square'></i>
+                        </button>`,
+                    },
+                ],
+                datos: data.registros
+            });
+
+        } catch (error) {
+            console.error('Error al cargar los datos:', error);
+        }
+    }
+
+    window.seleccionar_transporte = function (id_transporte) {
+        document.getElementById('id_transporte').value = id_transporte;
+        cargarDatosDetalleTransporte(id_transporte)
+      };
+
+    async function cargarDatosDetalleTransporte(id_transporte) {
+        try {
+            const response = await fetch(`${URL_API}/transporte/obtener_detalles_transporte/${id_transporte}`);
+            const data = await response.json();
+
+            const tb_detalle_transporte = new DataTable({
+                contenedor: 'contenedor-tabla-detalle-transporte', 
+                idTabla: 'tb-detalle-transporte', 
+                columnas: [
+                    { campo: "deposito", titulo: "Id transporte" },
+                    { campo: "material", titulo: "Fecha salida" },
+                    { campo: "cantidad_material", titulo: "Observación" }
+                ],
+                datos: data.registros
+            });
+
+        } catch (error) {
+            console.error('Error al cargar los datos:', error);
+        }
+    }
+
+    document.getElementById("form-salida_transporte").addEventListener("submit", async (event) => {
+        event.preventDefault(); // Evita la recarga de la página
+  
+        const form = event.target;
+        const formData = new FormData(form);
+        try {
+          const response = await fetch(
+            `${URL_API}/transporte/reg_salida_transporte/${id_proyecto}`,
+            {
+              method: "POST",
+              body: formData,
+            }
+          );
+          const respuesta = await response.json();
+          if (respuesta.exito) {
+            crearMensaje(respuesta.titulo,respuesta.mensaje,respuesta.redireccion);
+          } else {
+            crearMensaje(respuesta.titulo, respuesta.mensaje);
+          }
+        } catch (error) {
+          console.error("Error en la petición:", error);
+        }
+      });
+</script>
+{% endblock %}
